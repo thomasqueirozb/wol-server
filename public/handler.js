@@ -45,11 +45,11 @@ form.onsubmit = (ev) => {
 
 let check = document.getElementById("check-btn")
 check.onclick = () => {
+    document.getElementById("loading").style.visibility = "visible";
     const url = "/check"
     let request = new XMLHttpRequest();
     request.open('GET', url, true);
     const resp = document.getElementById("check")
-    resp.innerText = "Checkando poura"
 
     request.onload = function() { // request successful
         const json = JSON.parse(request.responseText);
@@ -61,6 +61,7 @@ check.onclick = () => {
         } else {
             resp.innerText = "Deu erro chora mais esquerdinha (" + code + ")"
         }
+        document.getElementById("loading").style.visibility = "hidden";
     };
     request.send();
 }

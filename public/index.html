@@ -2,96 +2,183 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
     <title>WOL</title>
     <style>
-        .center {
-            text-align: center; // margin: auto;
-            // width: 50%;
-            // border: 3px solid blue;
-            // padding: 10px;
-        }
-
         .container {
-            position: relative;
             width: 100%;
+            display: flex;
+            flex-flow: row nowrap;
+            justify-content: center;
+            height: 100vh;
+            padding: 0rem;
+            margin: 0rem;
+            font-family: Avenir, Helvetica, sans-serif;
         }
 
-        .btn-fancy {
-            position: relative; // top: 50%;
-            // left: 50%;
-            // transform: translate(-50%, -50%);
-            // -ms-transform: translate(-50%, -50%);
-            background-color: #f1f1f1;
-            color: black;
-            font-size: 16px;
-            margin-top: 8px;
-            padding: 16px 30px;
-            border: none;
-            cursor: pointer;
-            border-radius: 5px;
-            text-align: center;
+        .main {
+            display: flex;
+            flex-flow: column nowrap;
+            align-items: center;
+            justify-content: flex-start;
+            background-color: #1c2541;
         }
 
-        .btn-fancy:hover {
-            background-color: black;
+        .header {
+            width: 100vw;
+            background-color: #1c2541;
             color: white;
+            display: flex;
+            flex-flow: row nowrap;
+            justify-content: center;
+            align-items: center;
+            border-bottom: 0.2rem solid white;
         }
 
-        input.rounded {
-            border: 1px solid #ccc;
-
-            -moz-border-radius: 10px;
-            -webkit-border-radius: 10px;
-            border-radius: 10px;
-
-            -moz-box-shadow: 2px 2px 3px #666;
-            -webkit-box-shadow: 2px 2px 3px #666;
-            box-shadow: 2px 2px 3px #666;
-
-            font-size: 15px;
-            padding: 4px 7px;
-            outline: 0;
-            -webkit-appearance: none;
+        .box {
+            display: flex;
+            flex-flow: column nowrap;
+            justify-content: center;
+            align-items: center;
+            width: 30vw;
+            margin-top: 5vh;
+            box-shadow: 0.08rem 0.08rem 0.08rem 0.08rem gray;
+            padding: 2rem;
+            border-radius: 0.4rem;
+            background-color: white;
         }
 
-        input.rounded:focus {
-            /* supported IE8+ and all other browsers tested.
-   * optional, but gives the input focues when selected.
-   * change to a color that suits your design.
-   */
-            border-color: #02b1fc;
+        .input {
+            display: flex;
+            flex-flow: column nowrap;
+            align-items: flex-start;
+            justify-content: space-around;
+        }
+
+        input {
+            border-radius: 0.2rem;
+            border-style: none;
+            padding: 0.2rem;
+            border: 0.1rem solid #1c2541;
+        }
+
+        button {
+            border-style: none;
+            color: white;
+            width: 8vw;
+            background-color: #1c2541;
+            border: 0.1rem solid white;
+            border-radius: 0.3rem;
+            padding: 0.5rem 1.5rem;
+            margin-top: 0.5rem;
+        }
+
+        button:hover {
+            color: #1c2541;
+            background-color: white;
+            border: 0.1rem solid #1c2541;
+        }
+
+        .lds-ellipsis {
+            display: inline-block;
+            position: relative;
+            width: 64px;
+            height: 64px;
+        }
+
+        .lds-ellipsis div {
+            position: absolute;
+            top: 27px;
+            width: 11px;
+            height: 11px;
+            border-radius: 50%;
+            background: #1c2541;
+            animation-timing-function: cubic-bezier(0, 1, 1, 0);
+        }
+
+        .lds-ellipsis div:nth-child(1) {
+            left: 6px;
+            animation: lds-ellipsis1 0.6s infinite;
+        }
+
+        .lds-ellipsis div:nth-child(2) {
+            left: 6px;
+            animation: lds-ellipsis2 0.6s infinite;
+        }
+
+        .lds-ellipsis div:nth-child(3) {
+            left: 26px;
+            animation: lds-ellipsis2 0.6s infinite;
+        }
+
+        .lds-ellipsis div:nth-child(4) {
+            left: 45px;
+            animation: lds-ellipsis3 0.6s infinite;
+        }
+
+        @keyframes lds-ellipsis1 {
+            0% {
+                transform: scale(0);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        @keyframes lds-ellipsis3 {
+            0% {
+                transform: scale(1);
+            }
+            100% {
+                transform: scale(0);
+            }
+        }
+
+        @keyframes lds-ellipsis2 {
+            0% {
+                transform: translate(0, 0);
+            }
+            100% {
+                transform: translate(19px, 0);
+            }
         }
     </style>
-    <script src="handler.js" defer></script>
+    <script src="/handler.js" defer=""></script>
 </head>
 
-<body>
-    <div class="container center">
-        <h1>Wake On Lan</h1>
-
-        <form action="/wake" method="POST">
-            <label for="name">Password</label>
-            <div>
-                <input type="password" id="name" class="rounded" name="password">
+<body class="vsc-initialized container">
+    <div class="main">
+        <div class="header">
+            <h1>Wake On Lan</h1>
+        </div>
+        <form action="/wake" method="POST" class="box">
+            <div class="input">
+                <label for="name">Password</label>
+                <div>
+                    <input type="password" id="name" class="rounded" name="password" />
+                </div>
             </div>
             <div>
-                <button class="btn-fancy">Wake Up</button>
+                <button>Wake Up</button>
             </div>
-            <!--
-            <div>
-                <label for="mail">E-mail:</label>
-                <input type="email" id="mail" name="user_mail">
-            </div>
-            <div>
-                <label for="msg">Message:</label>
-                <textarea id="msg" name="user_message"></textarea>
-            </div>
-            -->
+            <h3 id="wol"></h3>
         </form>
-        <h3 id="wol"><h3>
-        <button id="check-btn" class="btn-fancy">Check</button>
-        <h3 id="check"><h3>
+        <div class="box">
+            <div class="lds-ellipsis" id="loading" style="visibility: hidden;">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+            <h3 id="check"></h3>
+            <h3></h3>
+            <h3>
+                <button id="check-btn" class="btn-fancy">
+                        Check
+                    </button>
+            </h3>
+        </div>
     </div>
 </body>
 
