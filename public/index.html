@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>WOL</title>
+    <style>
+        .center {
+            text-align: center; // margin: auto;
+            // width: 50%;
+            // border: 3px solid blue;
+            // padding: 10px;
+        }
+
+        .container {
+            position: relative;
+            width: 100%;
+        }
+
+        .btn-fancy {
+            position: relative; // top: 50%;
+            // left: 50%;
+            // transform: translate(-50%, -50%);
+            // -ms-transform: translate(-50%, -50%);
+            background-color: #f1f1f1;
+            color: black;
+            font-size: 16px;
+            margin-top: 8px;
+            padding: 16px 30px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .btn-fancy:hover {
+            background-color: black;
+            color: white;
+        }
+
+        input.rounded {
+            border: 1px solid #ccc;
+
+            -moz-border-radius: 10px;
+            -webkit-border-radius: 10px;
+            border-radius: 10px;
+
+            -moz-box-shadow: 2px 2px 3px #666;
+            -webkit-box-shadow: 2px 2px 3px #666;
+            box-shadow: 2px 2px 3px #666;
+
+            font-size: 15px;
+            padding: 4px 7px;
+            outline: 0;
+            -webkit-appearance: none;
+        }
+
+        input.rounded:focus {
+            /* supported IE8+ and all other browsers tested.
+   * optional, but gives the input focues when selected.
+   * change to a color that suits your design.
+   */
+            border-color: #02b1fc;
+        }
+    </style>
+    <script src="handler.js" defer></script>
+</head>
+
+<body>
+    <div class="container center">
+        <h1>Wake On Lan</h1>
+
+        <form action="/wake" method="POST">
+            <label for="name">Password</label>
+            <div>
+                <input type="password" id="name" class="rounded" name="password">
+            </div>
+            <div>
+                <button class="btn-fancy">Wake Up</button>
+            </div>
+            <!--
+            <div>
+                <label for="mail">E-mail:</label>
+                <input type="email" id="mail" name="user_mail">
+            </div>
+            <div>
+                <label for="msg">Message:</label>
+                <textarea id="msg" name="user_message"></textarea>
+            </div>
+            -->
+        </form>
+        <h3 id="wol"><h3>
+        <button id="check-btn" class="btn-fancy">Check</button>
+        <h3 id="check"><h3>
+    </div>
+</body>
+
+</html>
