@@ -15,27 +15,43 @@ const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
+let password_hash;
 try {
-    const password_hash = fs.readFileSync('password_sha256.txt').toString().trim()
+    password_hash = fs.readFileSync('password_sha256.txt').toString().trim();
 } catch (e) {
     if (e.code == 'ENOENT') {
-        console.log('File password_sha256.txt missing');
-        console.log('Run the following command to create a hashed password file')
-        console.log('\nnode scripts/create_hash.js')
+        console.error('File password_sha256.txt missing');
+        console.error('Run the following command to create a hashed password file');
+        console.error('\nnode scripts/create_hash.js');
         process.exit(3)
     }
-    console.log(e)
-    process.exit(1)
+    console.error(e);
+    process.exit(1);
 }
 
-const options = {
-    key: fs.readFileSync('ssl/localhost.key').toString(),
-    cert: fs.readFileSync('ssl/localhost.crt').toString(),
-    ciphers: 'ECDHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-SHA:ECDHE-RSA-AES128-SHA256:ECDHE-RSA-AES256-SHA:ECDHE-RSA-AES256-SHA384',
-    honorCipherOrder: true,
-    secureProtocol: 'TLSv1_2_method'
-};
+let use_https = true;
 
+let options;
+try {
+    options = {
+        key: fs.readFileSync('ssl/localhost.key').toString(),
+        cert: fs.readFileSync('ssl/localhost.crt').toString(),
+        ciphers: 'ECDHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-SHA:ECDHE-RSA-AES128-SHA256:ECDHE-RSA-AES256-SHA:ECDHE-RSA-AES256-SHA384',
+        honorCipherOrder: true,
+        secureProtocol: 'TLSv1_2_method'
+    };
+} catch (e) {
+    if (e.code == 'ENOENT') {
+        console.error('ssl certificates not found');
+        console.error('Https won\'t be used');
+        console.error('Run the following command to create the certificates');
+        console.error('\nsh scripts/keygen.sh');
+    }
+    else {
+        console.error(e);
+        process.exit(1);
+    }
+}
 app.post('/wake', (request, response) => {
     const sha256sum = crypto.createHash('sha256');
     sha256sum.update(request.body.password);
@@ -69,7 +85,7 @@ app.get('/handler.js', (request, response) => {
 
 function init_port(port, err) {
     if (err)
-        return console.log('[ERROR]', err);
+        return console.error(err);
 
     if (!shell.which('wol')) {
       shell.echo('Sorry, this script requires wol (Wake On LAN)');
