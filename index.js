@@ -42,10 +42,11 @@ try {
     };
 } catch (e) {
     if (e.code == 'ENOENT') {
-        console.error('ssl certificates not found');
-        console.error('Https won\'t be used');
+        console.error('SSL certificates not found');
+        console.error('https won\'t be used');
         console.error('Run the following command to create the certificates');
         console.error('\nsh scripts/keygen.sh');
+        use_https = false;
     }
     else {
         console.error(e);
@@ -95,12 +96,16 @@ function init_port(port, err) {
     console.log('Server is listening on', port);
 }
 
-var httpServer = http.createServer(app);
-var httpsServer = https.createServer(options, app);
+const httpServer = http.createServer(app);
 httpServer.listen(8080, (err) => {init_port(8080, err);})
-httpsServer.listen(8443, (err) => {init_port(8443, err);})
+if (use_https) {
+    const httpsServer = https.createServer(options, app);
+    httpsServer.listen(8443, (err) => {init_port(8443, err);})
 
-var httpServer80 = http.createServer(app);
-var httpsServer443 = https.createServer(options, app);
+
+    const httpsServer443 = https.createServer(options, app);
+    httpsServer443.listen(443, (err) => {init_port(443, err);})
+}
+
+const httpServer80 = http.createServer(app);
 httpServer80.listen(80, (err) => {init_port(80, err);})
-httpsServer443.listen(443, (err) => {init_port(443, err);})
