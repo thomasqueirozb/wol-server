@@ -1,0 +1,12 @@
+[Unit]
+Description=Node server
+After=network.target
+
+[Service]
+Type=simple
+User=USER
+WorkingDirectory=DIR
+ExecStart=/usr/bin/node index.js
+
+[Install]
+WantedBy=multi-user.target
