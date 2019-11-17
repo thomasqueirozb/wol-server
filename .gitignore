@@ -1,4 +1,3 @@
 node_modules/
 ssl/
 password_sha256.txt
-package-lock.json
