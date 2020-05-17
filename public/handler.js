@@ -9,7 +9,7 @@ form.onsubmit = (ev) => {
     const password = fd.get("password")
 
     if (password == "") {
-        resp.innerText = "Bota uma senha animal"
+        resp.innerText = "Favor inserir uma senha"
         return
     }
     resp.innerText = "Requestando caraio"
@@ -29,11 +29,11 @@ form.onsubmit = (ev) => {
         const json = JSON.parse(request.responseText);
         const code = json.success
         if (code == -1) {
-            resp.innerText = "Vai tomar no seu cu seu comunista de merda para de tentar advinhar a senha seu corno do caralho"
+            resp.innerText = "Senha inválida"
         } else if (code == 0) {
-            resp.innerText = "Ae caraio bora frita a cpu do PC"
+            resp.innerText = "Comando executado"
         } else {
-            resp.innerText = "Deu erro chora mais esquerdinha (" + code + ")"
+            resp.innerText = "Erro - código: (" + code + ")"
         }
     };
 
@@ -56,11 +56,11 @@ check.onclick = () => {
         const json = JSON.parse(request.responseText);
         const code = json.success
         if (code == 0) {
-            resp.innerText = "Tamo de pé bora fritar"
+            resp.innerText = "Computador ligado!"
         } else if (code == 1) {
-            resp.innerText = "Acalma o cu que não ligou"
+            resp.innerText = "Sem resposta do computador"
         } else {
-            resp.innerText = "Deu erro chora mais esquerdinha (" + code + ")"
+            resp.innerText = "Erro - código: (" + code + ")"
         }
         document.getElementById("loading").style.display = "none";
     };
