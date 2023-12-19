@@ -120,23 +120,20 @@ function init_port(port, err) {
     console.log("Server is listening on", port);
 }
 
-const httpServer = http.createServer(app);
-httpServer.listen(8080, (err) => {
-    init_port(8080, err);
-});
-if (use_https) {
-    const httpsServer = https.createServer(options, app);
-    httpsServer.listen(8443, (err) => {
-        init_port(8443, err);
-    });
-
-    const httpsServer443 = https.createServer(options, app);
-    httpsServer443.listen(443, (err) => {
-        init_port(443, err);
+for (let portStr of process.env.HTTP_PORTS.split(",")) {
+    let port = parseInt(portStr)
+    const httpServer = http.createServer(app);
+    httpServer.listen(port, (err) => {
+        init_port(port, err);
     });
 }
 
-const httpServer80 = http.createServer(app);
-httpServer80.listen(80, (err) => {
-    init_port(80, err);
-});
+if (use_https) {
+    for (let portStr of process.env.HTTP_PORTS.split(",")) {
+        let port = parseInt(portStr)
+        const httpServer = http.createServer(app);
+        httpServer.listen(port, (err) => {
+            init_port(port, err);
+        });
+    }
+}
