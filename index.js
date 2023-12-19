@@ -66,7 +66,9 @@ if (use_https) {
         if (e.code == "ENOENT") {
             console.error("SSL certificates not found");
             console.error("https won't be used");
-            console.error("Run the following command to create the certificates");
+            console.error(
+                "Run the following command to create the certificates"
+            );
             console.error("\nsh scripts/keygen.sh");
             use_https = false;
         } else {
@@ -113,7 +115,10 @@ function init_port(port, err) {
     if (err) return console.error(err);
 
     if (!shell.which(wol_command)) {
-        shell.echo("Sorry, this script requires the Wake On Lan command: " + wol_command);
+        shell.echo(
+            "Sorry, this script requires the Wake On Lan command: " +
+                wol_command
+        );
         shell.exit(1);
     }
 
@@ -121,7 +126,7 @@ function init_port(port, err) {
 }
 
 for (let portStr of process.env.HTTP_PORTS.split(",")) {
-    let port = parseInt(portStr)
+    let port = parseInt(portStr);
     const httpServer = http.createServer(app);
     httpServer.listen(port, (err) => {
         init_port(port, err);
@@ -130,7 +135,7 @@ for (let portStr of process.env.HTTP_PORTS.split(",")) {
 
 if (use_https) {
     for (let portStr of process.env.HTTP_PORTS.split(",")) {
-        let port = parseInt(portStr)
+        let port = parseInt(portStr);
         const httpServer = http.createServer(app);
         httpServer.listen(port, (err) => {
             init_port(port, err);
