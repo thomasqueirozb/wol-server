@@ -87,7 +87,7 @@ app.post("/wake", (request, response) => {
     }
 
     if (req_password === password) {
-        let ret = shell.exec(wol_command + process.env.MAC_ADDR);
+        let ret = shell.exec(wol_command + " " + process.env.MAC_ADDR);
         response.send({ success: ret.code });
     } else {
         response.send({ success: -1 });
