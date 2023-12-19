@@ -31,7 +31,7 @@ let password_hashed = toBool(process.env.PASSWORD_HASHED_SHA265);
 let password;
 
 if (process.env.PASSWORD) {
-    password = process.env.password;
+    password = process.env.PASSWORD;
 } else {
     try {
         password = fs.readFileSync("password_sha256.txt").toString().trim();
