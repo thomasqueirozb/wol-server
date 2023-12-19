@@ -1,6 +1,6 @@
 # Wake-On-Lan Server
 
-[Image of the running server](/page.png)
+![Image of the running server](/page.png)
 
 ## How to run:
 
