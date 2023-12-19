@@ -81,7 +81,7 @@ app.post("/wake", (request, response) => {
 });
 
 app.get("/check", (request, response) => {
-    let ret = shell.exec("ping -c 1 -W 1 -q 192.168.0.30");
+    let ret = shell.exec("ping -c 1 -W 1 -q " + process.env.IP_CHECK);
     response.send({ success: ret.code });
 });
 
