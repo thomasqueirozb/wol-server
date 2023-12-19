@@ -6,15 +6,10 @@
 
     <title>WOL</title>
     <style>
-        .container {
+        html, body {
+            height: 100%;
             width: 100%;
-            display: flex;
-            flex-flow: row nowrap;
-            justify-content: center;
-            height: 100vh;
-            padding: 0rem;
-            margin: 0rem;
-            font-family: Avenir, Helvetica, sans-serif;
+            background-color: #1c2541;
         }
 
         .main {
@@ -37,9 +32,8 @@
         }
 
         .box {
-            display: flex;
-            flex-flow: column nowrap;
-            justify-content: center;
+            display: grid;
+            justify-items: center;
             align-items: center;
             width: 30vw;
             margin-top: 5vh;
@@ -47,13 +41,6 @@
             padding: 2rem;
             border-radius: 0.4rem;
             background-color: white;
-        }
-
-        .input {
-            display: flex;
-            flex-flow: column nowrap;
-            align-items: flex-start;
-            justify-content: space-around;
         }
 
         input {
@@ -147,13 +134,13 @@
     <script src="/handler.js" defer=""></script>
 </head>
 
-<body class="vsc-initialized container">
+<body>
     <div class="main">
         <div class="header">
             <h1>Wake On Lan</h1>
         </div>
         <form action="/wake" method="POST" class="box">
-            <div class="input">
+            <div>
                 <label for="name">Password</label>
                 <div>
                     <input type="password" id="name" class="rounded" name="password" />
