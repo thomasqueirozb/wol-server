@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 const fs = require("fs");
 
 const crypto = require("crypto");
@@ -10,6 +12,15 @@ const shell = require("shelljs");
 const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
+
+function toBool(v) {
+    if (!v) return null;
+    let vLower = v.toLowerCase();
+
+    if (vLower === "true") return true;
+    if (vLower === "false") return false;
+    return null;
+}
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -30,28 +41,30 @@ try {
     process.exit(1);
 }
 
-let use_https = true;
+let use_https = toBool(process.env.USE_HTTPS);
 
-let options;
-try {
-    options = {
-        key: fs.readFileSync("ssl/localhost.key").toString(),
-        cert: fs.readFileSync("ssl/localhost.crt").toString(),
-        ciphers:
-            "ECDHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-SHA:ECDHE-RSA-AES128-SHA256:ECDHE-RSA-AES256-SHA:ECDHE-RSA-AES256-SHA384",
-        honorCipherOrder: true,
-        secureProtocol: "TLSv1_2_method",
-    };
-} catch (e) {
-    if (e.code == "ENOENT") {
-        console.error("SSL certificates not found");
-        console.error("https won't be used");
-        console.error("Run the following command to create the certificates");
-        console.error("\nsh scripts/keygen.sh");
-        use_https = false;
-    } else {
-        console.error(e);
-        process.exit(1);
+let options = {};
+if (use_https) {
+    try {
+        options = {
+            key: fs.readFileSync("ssl/localhost.key").toString(),
+            cert: fs.readFileSync("ssl/localhost.crt").toString(),
+            ciphers:
+                "ECDHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-SHA:ECDHE-RSA-AES128-SHA256:ECDHE-RSA-AES256-SHA:ECDHE-RSA-AES256-SHA384",
+            honorCipherOrder: true,
+            secureProtocol: "TLSv1_2_method",
+        };
+    } catch (e) {
+        if (e.code == "ENOENT") {
+            console.error("SSL certificates not found");
+            console.error("https won't be used");
+            console.error("Run the following command to create the certificates");
+            console.error("\nsh scripts/keygen.sh");
+            use_https = false;
+        } else {
+            console.error(e);
+            process.exit(1);
+        }
     }
 }
 app.post("/wake", (request, response) => {
@@ -60,7 +73,7 @@ app.post("/wake", (request, response) => {
     const hashed = sha256sum.digest("hex");
 
     if (hashed == password_hash) {
-        let ret = shell.exec("wol d4:3d:7e:f1:50:4f");
+        let ret = shell.exec("wol " + process.env.MAC_ADDR);
         response.send({ success: ret.code });
     } else {
         response.send({ success: -1 });
