@@ -25,20 +25,28 @@ function toBool(v) {
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-let password_hash;
-try {
-    password_hash = fs.readFileSync("password_sha256.txt").toString().trim();
-} catch (e) {
-    if (e.code == "ENOENT") {
-        console.error("File password_sha256.txt missing");
-        console.error(
-            "Run the following command to create a hashed password file"
-        );
-        console.error("\nnode scripts/create_hash.js");
-        process.exit(3);
+let wol_command = process.env.WOL_COMMAND || "wol";
+
+let password_hashed = toBool(process.env.PASSWORD_HASHED_SHA265);
+let password;
+
+if (process.env.PASSWORD) {
+    password = process.env.password;
+} else {
+    try {
+        password = fs.readFileSync("password_sha256.txt").toString().trim();
+    } catch (e) {
+        if (e.code == "ENOENT") {
+            console.error("File password_sha256.txt missing");
+            console.error(
+                "Run the following command to create a hashed password file"
+            );
+            console.error("\nnode scripts/create_hash.js");
+            process.exit(3);
+        }
+        console.error(e);
+        process.exit(1);
     }
-    console.error(e);
-    process.exit(1);
 }
 
 let use_https = toBool(process.env.USE_HTTPS);
@@ -68,12 +76,16 @@ if (use_https) {
     }
 }
 app.post("/wake", (request, response) => {
-    const sha256sum = crypto.createHash("sha256");
-    sha256sum.update(request.body.password);
-    const hashed = sha256sum.digest("hex");
+    let req_password = request.body.password;
 
-    if (hashed == password_hash) {
-        let ret = shell.exec("wol " + process.env.MAC_ADDR);
+    if (password_hashed) {
+        const sha256sum = crypto.createHash("sha256");
+        sha256sum.update(req_password);
+        req_password = sha256sum.digest("hex");
+    }
+
+    if (req_password === password) {
+        let ret = shell.exec(wol_command + process.env.MAC_ADDR);
         response.send({ success: ret.code });
     } else {
         response.send({ success: -1 });
@@ -100,8 +112,8 @@ app.get("/handler.js", (request, response) => {
 function init_port(port, err) {
     if (err) return console.error(err);
 
-    if (!shell.which("wol")) {
-        shell.echo("Sorry, this script requires wol (Wake On LAN)");
+    if (!shell.which(wol_command)) {
+        shell.echo("Sorry, this script requires the Wake On Lan command: " + wol_command);
         shell.exit(1);
     }
 
