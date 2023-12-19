@@ -9,10 +9,10 @@ form.onsubmit = (ev) => {
     const password = fd.get("password")
 
     if (password == "") {
-        resp.innerText = "Favor inserir uma senha"
+        resp.innerText = "Please insert password"
         return
     }
-    resp.innerText = "Requestando caraio"
+    resp.innerText = "Requesting..."
 
     params = {
         "password": password
@@ -29,11 +29,11 @@ form.onsubmit = (ev) => {
         const json = JSON.parse(request.responseText);
         const code = json.success
         if (code == -1) {
-            resp.innerText = "Senha inválida"
+            resp.innerText = "Invalid password"
         } else if (code == 0) {
-            resp.innerText = "Comando executado"
+            resp.innerText = "Command executed"
         } else {
-            resp.innerText = "Erro - código: (" + code + ")"
+            resp.innerText = "Error - code: (" + code + ")"
         }
     };
 
@@ -56,11 +56,11 @@ check.onclick = () => {
         const json = JSON.parse(request.responseText);
         const code = json.success
         if (code == 0) {
-            resp.innerText = "Computador ligado!"
+            resp.innerText = "Turned on!"
         } else if (code == 1) {
-            resp.innerText = "Sem resposta do computador"
+            resp.innerText = "No response"
         } else {
-            resp.innerText = "Erro - código: (" + code + ")"
+            resp.innerText = "Error - code: (" + code + ")"
         }
         document.getElementById("loading").style.display = "none";
     };
